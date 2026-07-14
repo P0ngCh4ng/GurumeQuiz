@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import allQuestions from './questions.json'
+import ContactForm from './components/ContactForm.vue'
 
 const QUIZ_SIZE = 10 // 1ラウンドの出題数（実在・捏造を半々）
 
@@ -55,6 +56,18 @@ function next() {
   }
 }
 
+// お問い合わせ画面の表示状態と、送信完了（?sent=1 で戻ってきた時）のバナー
+const showContact = ref(false)
+const sentThanks = ref(false)
+
+onMounted(() => {
+  const params = new URLSearchParams(location.search)
+  if (params.get('sent') === '1') {
+    sentThanks.value = true
+    history.replaceState(null, '', location.pathname)
+  }
+})
+
 const rank = computed(() => {
   const s = score.value
   if (s === QUIZ_SIZE) return { title: '美食神', comment: '完全制覇！グルメ細胞が覚醒しています。' }
@@ -75,8 +88,19 @@ const rank = computed(() => {
       <p class="tagline">『トリコ』に実在する「グルメ〇〇」を見抜け！</p>
     </header>
 
+    <div v-if="sentThanks" class="sent-banner" role="status">
+      お問い合わせを送信しました。ありがとうございました！
+      <button class="sent-close" @click="sentThanks = false" aria-label="閉じる">×</button>
+    </div>
+
+    <!-- お問い合わせ画面 -->
+    <main v-if="showContact" class="card contact-card">
+      <ContactForm />
+      <button class="btn btn-back" @click="showContact = false">クイズに戻る</button>
+    </main>
+
     <!-- スタート画面 -->
-    <main v-if="phase === 'start'" class="card start-card">
+    <main v-else-if="phase === 'start'" class="card start-card">
       <p class="start-desc">
         表示される「グルメ〇〇」という言葉が、<br />
         漫画『トリコ』の作中に<strong>実在する（ある）</strong>か、<br />
@@ -138,6 +162,7 @@ const rank = computed(() => {
     </main>
 
     <footer class="footer">
+      <button v-if="!showContact" class="footer-link" @click="showContact = true">📮 お問い合わせ</button>
       <p>非公式ファンサイトです。『トリコ』（島袋光年／集英社）の画像・ロゴ等は使用していません。</p>
     </footer>
   </div>

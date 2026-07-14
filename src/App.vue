@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import allQuestions from './questions.json'
 import ContactForm from './components/ContactForm.vue'
 
@@ -56,17 +56,8 @@ function next() {
   }
 }
 
-// お問い合わせ画面の表示状態と、送信完了（?sent=1 で戻ってきた時）のバナー
+// お問い合わせ画面の表示状態
 const showContact = ref(false)
-const sentThanks = ref(false)
-
-onMounted(() => {
-  const params = new URLSearchParams(location.search)
-  if (params.get('sent') === '1') {
-    sentThanks.value = true
-    history.replaceState(null, '', location.pathname)
-  }
-})
 
 const rank = computed(() => {
   const s = score.value
@@ -87,11 +78,6 @@ const rank = computed(() => {
       </h1>
       <p class="tagline">『トリコ』に実在する「グルメ〇〇」を見抜け！</p>
     </header>
-
-    <div v-if="sentThanks" class="sent-banner" role="status">
-      お問い合わせを送信しました。ありがとうございました！
-      <button class="sent-close" @click="sentThanks = false" aria-label="閉じる">×</button>
-    </div>
 
     <!-- お問い合わせ画面 -->
     <main v-if="showContact" class="card contact-card">

@@ -435,28 +435,23 @@ body {
   text-align: center;
 }
 
-/* 送信完了バナー */
-.sent-banner {
-  background: rgba(46, 204, 113, 0.15);
-  border: 2px solid var(--green);
+/* 送信結果メッセージ */
+.form-result {
   border-radius: 10px;
-  padding: 12px 40px 12px 16px;
-  margin-bottom: 16px;
-  position: relative;
+  padding: 14px 16px;
   font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: left;
 }
 
-.sent-close {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 8px;
+.form-result-success {
+  background: rgba(46, 204, 113, 0.15);
+  border: 2px solid var(--green);
+}
+
+.form-result-error {
+  background: rgba(231, 76, 60, 0.15);
+  border: 2px solid var(--red);
 }
 
 .footer-link {
